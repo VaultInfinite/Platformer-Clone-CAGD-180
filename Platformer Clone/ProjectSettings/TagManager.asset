@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Bullet
   - Enemy
+  - HeavyBullet
+  - HeavyBulletPickUp
   layers:
   - Default
   - TransparentFX
