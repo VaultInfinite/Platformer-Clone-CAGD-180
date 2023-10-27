@@ -1,6 +1,6 @@
 /*
  * Wyatt Salmoria & Karen Kalkat
- * 10/26/23
+ * 10/27/23
  * Handles the movement of Metroid Character (Probably Samus?) alongside other factors 
  * related to player control, such as lives.
  */
@@ -18,7 +18,7 @@ public class PlayerController : MonoBehaviour
     public float speed = 5f;
 
     //The force of the players jump, how high they will go.
-    public float jumpForce = 50f;
+    public float jumpForce = 6f;
 
     //location where the player respawns to
     private Vector3 startPos;
@@ -49,6 +49,29 @@ public class PlayerController : MonoBehaviour
         {
             //translate the player right by speed using Time.deltaTime
             transform.position += Vector3.right * speed * Time.deltaTime;
+        }
+
+        HandleJumping();
+    }
+
+    /// <summary>
+    /// Checks to see if the play is on the ground, and if so, will make the player jump upon hitting space.
+    /// </summary>
+    private void HandleJumping()
+    {
+        //When player touches the spacebar the player will jump
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            RaycastHit hit;
+
+            //if the raycast returns true then an object has been hit and the player is touching the floor
+            //For Raycast(startPosition, RayDirection, output the object hit, maximumDistanceForTheRaycastToFire)
+            if (Physics.Raycast(transform.position, Vector3.down, out hit, 1.5f))
+            {
+                Debug.Log("Touching the ground");
+                rigidbody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+            }
+
         }
     }
 
