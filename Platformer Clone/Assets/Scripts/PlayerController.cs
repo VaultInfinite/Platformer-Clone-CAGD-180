@@ -11,8 +11,8 @@ using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
-    //The amount of lives the player has/how many hits they can take.
-    public int Health = 99;
+    //The amount of Health Points the player has, deciding how many hits they can take.
+    public int health = 99;
 
     //The speed at which the player will move.
     public float speed = 5f;
@@ -79,7 +79,7 @@ public class PlayerController : MonoBehaviour
     {
         ///INSERT CODE HERE INSTRUCTING PLAYER TO FLASH FOR 5 SECONDS, AND INVULNERABILITY.
         InvulnTimer();
-        if (Health == 0)
+        if (health == 0)
         {
             //SceneManager.LoadScene(#);
             //When utilized put the Game Over build scene number where the # is.
@@ -91,14 +91,19 @@ public class PlayerController : MonoBehaviour
         //If we collide with a regular enemy, take regular damage.
         if (other.gameObject.tag == "Enemy" && invuln == false)
         {
-            Health -= 15;
+            health -= 15;
             Damage();
         }
         //If we collide with a Harder enemy, take higher damage.
         if (other.gameObject.tag == "HardEnemy" && invuln == false)
         {
-            Health -= 35;
+            health -= 35;
             Damage();
+        }
+        //If we collide with a healing item, heal HP for designated amount.
+        if (other.gameObject.tag == "Heal")
+        {
+            //Create healing script here, wasn't working previously on the 27th.
         }
     }
 
