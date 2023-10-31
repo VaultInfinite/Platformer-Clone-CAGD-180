@@ -1,6 +1,6 @@
 /*
  * Wyatt Salmoria & Karen Kalkat
- * 10/27/23
+ * 10/31/23
  * Handles the movement of Metroid Character (Probably Samus?) alongside other factors 
  * related to player control, such as lives.
  */
@@ -11,6 +11,8 @@ using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
+    public HealthPackValue healthPack;
+
     //The amount of Health Points the player has, deciding how many hits they can take.
     public int health = 99;
 
@@ -32,6 +34,8 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        //set the startPos
+        startPos = transform.position;
         //set the reference to the player's attached rigidbody
         rigidbody = GetComponent<Rigidbody>();
     }
@@ -103,16 +107,18 @@ public class PlayerController : MonoBehaviour
         //If we collide with a healing item, heal HP for designated amount.
         if (other.gameObject.tag == "Heal")
         {
-            //Create healing script here, wasn't working previously on the 27th.
+            health += healthPack.HPValue;
+            other.gameObject.SetActive(false);
+
         }
     }
 
     IEnumerator InvulnTimer()
     {
-        //Set a stunned bool to true
+        //Set a invuln bool to true
         invuln = true;
         yield return new WaitForSeconds(5f);
-        //Set Stunned bool to false
+        //Set invulnerability bool to false
         invuln = false;
     }
 }
