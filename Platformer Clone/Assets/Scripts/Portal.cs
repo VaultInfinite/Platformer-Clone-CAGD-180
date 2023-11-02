@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /*
- * Author: [Kalkat, Karen]
+ * Author: [Kalkat, Karen & Salmoria, Wyatt]
  * Last Updated: [10/31/2023]
  * [Contains the code for the Portal]
  */
