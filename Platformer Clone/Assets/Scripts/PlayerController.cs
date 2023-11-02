@@ -1,8 +1,8 @@
 /*
  * Salmoria, Wyatt & Kalkat, Karen
- * 10/31/23
+ * 11/2/23
  * Handles the movement of Metroid Character (Probably Samus?) alongside other factors 
- * related to player control, such as lives.
+ * related to player control, such as lives and gun control.
  */
 using System.Collections;
 using System.Collections.Generic;
@@ -11,16 +11,22 @@ using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
+    //Designation for Health Pack to allow for variable amounts of healing.
     public HealthPackValue healthPack;
+
+    public GameObject bulletPrefab;
 
     //The amount of Health Points the player has, deciding how many hits they can take.
     public int health = 99;
 
-    //The speed at which the player will move.
-    public float speed = 5f;
+    //The amount of HP the player can have at one point. will be increased via the max health increase item.
+    public int healthLimit = 99;
 
     //The force of the players jump, how high they will go.
     public float jumpForce = 6f;
+
+    //The speed at which the player will move.
+    public float speed = 5f;
 
     //location where the player respawns to
     private Vector3 startPos;
@@ -30,6 +36,14 @@ public class PlayerController : MonoBehaviour
 
     //Bool to state whether or not Player is Invulnerable.
     private bool invuln = false;
+
+    //Bool to state whether or not Player weapon is recharging.
+    private bool recharge = false;
+
+    //Bool to state whether the player is facing right or not based off input.
+    private bool facingRight = true;
+
+    private bool shootRight = true;
 
     // Start is called before the first frame update
     void Start()
@@ -53,6 +67,21 @@ public class PlayerController : MonoBehaviour
         {
             //translate the player right by speed using Time.deltaTime
             transform.position += Vector3.right * speed * Time.deltaTime;
+        }
+
+        //Player weapon control
+        if (Input.GetKeyDown(KeyCode.Return) && facingRight == false && recharge == false)
+        {
+            //create a new instance of the prefab in the scene and set it's position and rotation = to this object
+            GameObject bulletInstance = Instantiate(bulletPrefab, transform.position, transform.rotation);
+            GunRecharge();
+        }
+        if (Input.GetKeyDown(KeyCode.Return) && facingRight == true && recharge == false)
+        {
+            //create a new instance of the prefab in the scene and set it's position and rotation = to this object
+            GameObject bulletInstance = Instantiate(bulletPrefab, transform.position, transform.rotation);
+            bulletInstance.GetComponent<Bullet>().moveRight = shootRight;
+            GunRecharge();
         }
 
         HandleJumping();
@@ -109,6 +138,10 @@ public class PlayerController : MonoBehaviour
         {
             health += healthPack.HPValue;
             other.gameObject.SetActive(false);
+            if (health > healthLimit)
+            {
+                health = 99;
+            }
         }
         //If we collide with the portal, teleport the player to the portal's teleport point. Setting startposition is not needed due to functionality of the game.
         if (other.gameObject.tag == "Portal")
@@ -117,12 +150,24 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    //Enumerator for invulnerability, dictates whether or not the player will take damage when making contact.
     IEnumerator InvulnTimer()
     {
-        //Set a invuln bool to true
+        //Set the invuln bool to true
         invuln = true;
         yield return new WaitForSeconds(5f);
         //Set invulnerability bool to false
         invuln = false;
+    }
+
+    //Enumerator for FireRate, or specifically recharge, dictating whether or not the player will fire their weapon when hitting the fire button.
+    IEnumerator GunRecharge()
+    {
+        //set the recharge bool to true
+        recharge = true;
+        yield return new WaitForSeconds(.5f);
+        //Set recharge bool to false
+        recharge = false;
+
     }
 }
