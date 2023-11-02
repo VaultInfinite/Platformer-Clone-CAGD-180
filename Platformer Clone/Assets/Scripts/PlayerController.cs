@@ -19,6 +19,9 @@ public class PlayerController : MonoBehaviour
     //The speed at which the player will move.
     public float speed = 5f;
 
+    //The amount of HP the player can have at one point. will be increased via the max health increase item.
+    public int healthLimit = 99;
+
     //The force of the players jump, how high they will go.
     public float jumpForce = 6f;
 
@@ -109,6 +112,10 @@ public class PlayerController : MonoBehaviour
         {
             health += healthPack.HPValue;
             other.gameObject.SetActive(false);
+            if (health > healthLimit)
+            {
+                health = 99;
+            }
         }
         //If we collide with the portal, teleport the player to the portal's teleport point. Setting startposition is not needed due to functionality of the game.
         if (other.gameObject.tag == "Portal")
