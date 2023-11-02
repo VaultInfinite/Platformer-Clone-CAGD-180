@@ -1,5 +1,5 @@
 /*
- * Wyatt Salmoria & Karen Kalkat
+ * Salmoria, Wyatt & Kalkat, Karen
  * 10/31/23
  * Handles the movement of Metroid Character (Probably Samus?) alongside other factors 
  * related to player control, such as lives.
@@ -81,11 +81,11 @@ public class PlayerController : MonoBehaviour
 
     private void Damage()
     {
-        ///INSERT CODE HERE INSTRUCTING PLAYER TO FLASH FOR 5 SECONDS, AND INVULNERABILITY.
+        ///INSERT CODE HERE INSTRUCTING PLAYER TO FLASH FOR 5 SECONDS
         InvulnTimer();
         if (health == 0)
         {
-            //SceneManager.LoadScene(#);
+            //SceneManager.LoadScene(2);
             //When utilized put the Game Over build scene number where the # is.
         }
     }
@@ -109,7 +109,11 @@ public class PlayerController : MonoBehaviour
         {
             health += healthPack.HPValue;
             other.gameObject.SetActive(false);
-
+        }
+        //If we collide with the portal, teleport the player to the portal's teleport point. Setting startposition is not needed due to functionality of the game.
+        if (other.gameObject.tag == "Portal")
+        {
+            transform.position = other.GetComponent<Portal>().spawnPoint.transform.position;
         }
     }
 

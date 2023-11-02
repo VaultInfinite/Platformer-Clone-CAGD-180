@@ -1,5 +1,5 @@
 /*
- * Wyatt Salmoria & Karen Kalkat
+ * Salmoria, Wyatt & Kalkat, Karen
  * 10/27/23
  * Handles the MenuUI of the Main Menu of the game, and likely the Game Over screen
  */

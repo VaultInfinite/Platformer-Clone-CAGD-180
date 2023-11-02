@@ -1,3 +1,8 @@
+/*
+ * Salmoria, Wyatt & Kalkat, Karen
+ * 10/27/23
+ * Handles the rotation of the character model and makes sure it is facing the correct direction according to inputs.
+ */
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;

@@ -1,5 +1,5 @@
 /*
- *Wyatt Salmoria & Karen Kalkat
+ * Salmoria, Wyatt & Kalkat, Karen
  * 10/31/23
  * If utilized in end product, will allow the camera to follow the player without the current setup
  * of the player and camera in the same empty.
