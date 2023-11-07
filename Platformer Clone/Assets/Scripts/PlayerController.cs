@@ -43,7 +43,7 @@ public class PlayerController : MonoBehaviour
     //Bool to state whether the player is facing right or not based off input.
     private bool facingRight = true;
 
-    private bool shootRight = true;
+    private bool shootLeft = false;
 
     // Start is called before the first frame update
     void Start()
@@ -62,11 +62,13 @@ public class PlayerController : MonoBehaviour
         {
             //translate the player left by speed using Time.deltaTime
             transform.position += Vector3.left * speed * Time.deltaTime;
+            facingRight = false;
         }
         if (Input.GetKey(KeyCode.D))
         {
             //translate the player right by speed using Time.deltaTime
             transform.position += Vector3.right * speed * Time.deltaTime;
+            facingRight = true;
         }
 
         //Player weapon control
@@ -74,14 +76,17 @@ public class PlayerController : MonoBehaviour
         {
             //create a new instance of the prefab in the scene and set it's position and rotation = to this object
             GameObject bulletInstance = Instantiate(bulletPrefab, transform.position, transform.rotation);
-            GunRecharge();
+            shootLeft = true;
+            bulletInstance.GetComponent<Bullet>().moveLeft = shootLeft;
+            StartCoroutine(GunRecharge());
         }
         if (Input.GetKeyDown(KeyCode.Return) && facingRight == true && recharge == false)
         {
             //create a new instance of the prefab in the scene and set it's position and rotation = to this object
             GameObject bulletInstance = Instantiate(bulletPrefab, transform.position, transform.rotation);
-            bulletInstance.GetComponent<Bullet>().moveRight = shootRight;
-            GunRecharge();
+            shootLeft = false;
+            bulletInstance.GetComponent<Bullet>().moveLeft = shootLeft;
+            StartCoroutine(GunRecharge());
         }
 
         HandleJumping();
@@ -168,6 +173,5 @@ public class PlayerController : MonoBehaviour
         yield return new WaitForSeconds(.5f);
         //Set recharge bool to false
         recharge = false;
-
     }
 }
