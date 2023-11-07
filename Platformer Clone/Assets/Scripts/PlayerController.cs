@@ -1,6 +1,6 @@
 /*
  * Salmoria, Wyatt & Kalkat, Karen
- * 11/2/23
+ * 11/7/23
  * Handles the movement of Metroid Character (Probably Samus?) alongside other factors 
  * related to player control, such as lives and gun control.
  */
@@ -14,7 +14,11 @@ public class PlayerController : MonoBehaviour
     //Designation for Health Pack to allow for variable amounts of healing.
     public HealthPackValue healthPack;
 
+    //Designation for the Bullet to allow the player to properly fire a projectile.
     public GameObject bulletPrefab;
+
+    //Designation for part of the player model to allow for blinking during invulnerability timer.
+    public GameObject Body;
 
     //The amount of Health Points the player has, deciding how many hits they can take.
     public int health = 99;
@@ -115,8 +119,8 @@ public class PlayerController : MonoBehaviour
 
     private void Damage()
     {
-        ///INSERT CODE HERE INSTRUCTING PLAYER TO FLASH FOR 5 SECONDS
         StartCoroutine(InvulnTimer());
+        StartCoroutine(Blink());
         if (health == 0)
         {
             //SceneManager.LoadScene(2);
@@ -173,5 +177,23 @@ public class PlayerController : MonoBehaviour
         yield return new WaitForSeconds(.5f);
         //Set recharge bool to false
         recharge = false;
+    }
+
+    //Enumerator for causing the player to blink when taking damage
+    public IEnumerator Blink()
+    {
+        for (int index = 0; index < 10; index++)
+        {
+            if (index % 2 == 0)
+            {
+                Body.GetComponent<MeshRenderer>().enabled = false;
+            }
+            else
+            {
+                Body.GetComponent<MeshRenderer>().enabled = true;
+            }
+            yield return new WaitForSeconds(.5f);
+        }
+        Body.GetComponent<MeshRenderer>().enabled = true;
     }
 }

@@ -49,10 +49,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   healthPack: {fileID: 0}
   bulletPrefab: {fileID: 6479932865552830840, guid: a2d563596df2c49fe82b15528cf935f0, type: 3}
+  Body: {fileID: 600730028668251737}
   health: 99
-  speed: 5
   healthLimit: 99
   jumpForce: 6
+  speed: 5
 --- !u!54 &4353485837886993797
 Rigidbody:
   m_ObjectHideFlags: 0
