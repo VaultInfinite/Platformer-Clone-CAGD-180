@@ -116,7 +116,7 @@ public class PlayerController : MonoBehaviour
     private void Damage()
     {
         ///INSERT CODE HERE INSTRUCTING PLAYER TO FLASH FOR 5 SECONDS
-        InvulnTimer();
+        StartCoroutine(InvulnTimer());
         if (health == 0)
         {
             //SceneManager.LoadScene(2);
