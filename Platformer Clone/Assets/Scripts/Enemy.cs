@@ -18,7 +18,7 @@ public class Enemy : MonoBehaviour
     public int speed;
     public bool goingLeft;
 
-    private int lives = 1;
+    private int health = 1;
 
     // Start is called before the first frame update
     void Start()
@@ -34,6 +34,9 @@ public class Enemy : MonoBehaviour
         GetHitByBullet();
     }
 
+    /// <summary>
+    /// allows the enemy to recieve damage from the bullet and take away its health
+    /// </summary>
     private void GetHitByBullet()
     {
         RaycastHit hit;
@@ -41,17 +44,17 @@ public class Enemy : MonoBehaviour
         {
             if (hit.collider.gameObject.tag == "Bullet")
             {
-                NoLives();
+                NoHealth();
             }
         }
     }
 
     /// <summary>
-    /// enemy loses a life and disappears
+    /// enemy loses its health and disappears
     /// </summary>
-    private void NoLives()
+    private void NoHealth()
     {
-        lives--;
+        health--;
         enemy.SetActive(false);
     }
 

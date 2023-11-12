@@ -10,6 +10,9 @@ using UnityEngine;
 
 public class Portal : MonoBehaviour
 {
+    /// <summary>
+    /// the area where the player will spawn after going through the portal
+    /// </summary>
     public GameObject spawnPoint;
 
     // Start is called before the first frame update
