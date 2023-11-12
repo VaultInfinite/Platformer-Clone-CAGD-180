@@ -1,6 +1,6 @@
 /*
  * Salmoria, Wyatt & Kalkat, Karen
- * 11/7/23
+ * 11/11/23
  * Handles the movement of Metroid Character (Probably Samus?) alongside other factors 
  * related to player control, such as lives and gun control.
  */
@@ -11,14 +11,24 @@ using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
-    //Designation for Health Pack to allow for variable amounts of healing.
-    public HealthPackValue healthPack;
 
     //Designation for the Bullet to allow the player to properly fire a projectile.
     public GameObject bulletPrefab;
 
+    //Designation for the heavy bullet to allow the player to properly fire a heavier projectile.
+    public GameObject heavyBulletPrefab;
+
     //Designation for part of the player model to allow for blinking during invulnerability timer.
     public GameObject Body;
+
+    //Designation for Health Pack to allow for variable amounts of healing.
+    public HealthPackValue healthPack;
+
+    //location where the player respawns to
+    private Vector3 startPos;
+
+    //Designation for Rigidbody for jumping.
+    private Rigidbody rigidbody;
 
     //The amount of Health Points the player has, deciding how many hits they can take.
     public int health = 99;
@@ -32,12 +42,6 @@ public class PlayerController : MonoBehaviour
     //The speed at which the player will move.
     public float speed = 5f;
 
-    //location where the player respawns to
-    private Vector3 startPos;
-
-    //Designation for Rigidbody for jumping.
-    private Rigidbody rigidbody;
-
     //Bool to state whether or not Player is Invulnerable.
     private bool invuln = false;
 
@@ -47,7 +51,11 @@ public class PlayerController : MonoBehaviour
     //Bool to state whether the player is facing right or not based off input.
     private bool facingRight = true;
 
+    //Bool to state whether the player will shoot left or not
     private bool shootLeft = false;
+
+    //Bool to state whether the player has picked up the heavy bullet buff or not. If so, used to change bullet type.
+    private bool HeavyBullet = false;
 
     // Start is called before the first frame update
     void Start()
@@ -76,7 +84,7 @@ public class PlayerController : MonoBehaviour
         }
 
         //Player weapon control
-        if (Input.GetKeyDown(KeyCode.Return) && facingRight == false && recharge == false)
+        if (Input.GetKeyDown(KeyCode.Return) && facingRight == false && recharge == false && HeavyBullet == false)
         {
             //create a new instance of the prefab in the scene and set it's position and rotation = to this object
             GameObject bulletInstance = Instantiate(bulletPrefab, transform.position, transform.rotation);
@@ -84,7 +92,7 @@ public class PlayerController : MonoBehaviour
             bulletInstance.GetComponent<Bullet>().moveLeft = shootLeft;
             StartCoroutine(GunRecharge());
         }
-        if (Input.GetKeyDown(KeyCode.Return) && facingRight == true && recharge == false)
+        if (Input.GetKeyDown(KeyCode.Return) && facingRight == true && recharge == false && HeavyBullet == false)
         {
             //create a new instance of the prefab in the scene and set it's position and rotation = to this object
             GameObject bulletInstance = Instantiate(bulletPrefab, transform.position, transform.rotation);
@@ -92,8 +100,25 @@ public class PlayerController : MonoBehaviour
             bulletInstance.GetComponent<Bullet>().moveLeft = shootLeft;
             StartCoroutine(GunRecharge());
         }
+        //Heavy Bullet inputs for the player weapon.
+        if (Input.GetKeyDown(KeyCode.Return) && facingRight == false && recharge == false && HeavyBullet == true)
+        {
+            //create a new instance of the prefab in the scene and set it's position and rotation = to this object
+            GameObject bulletInstance = Instantiate(heavyBulletPrefab, transform.position, transform.rotation);
+            shootLeft = true;
+            bulletInstance.GetComponent<Bullet>().moveLeft = shootLeft;
+            StartCoroutine(GunRecharge());
+        }
+        if (Input.GetKeyDown(KeyCode.Return) && facingRight == true && recharge == false && HeavyBullet == true)
+        {
+            //create a new instance of the prefab in the scene and set it's position and rotation = to this object
+            GameObject bulletInstance = Instantiate(heavyBulletPrefab, transform.position, transform.rotation);
+            shootLeft = false;
+            bulletInstance.GetComponent<Bullet>().moveLeft = shootLeft;
+            StartCoroutine(GunRecharge());
+        }
 
-        HandleJumping();
+            HandleJumping();
     }
 
     /// <summary>
@@ -113,21 +138,26 @@ public class PlayerController : MonoBehaviour
                 Debug.Log("Touching the ground");
                 rigidbody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
             }
-
         }
     }
 
+    /// <summary>
+    /// The script that runs upon taking damage, and will start an invuln timer, blink the character, and load the game over scene if health hits zero.
+    /// </summary>
     private void Damage()
     {
         StartCoroutine(InvulnTimer());
         StartCoroutine(Blink());
         if (health == 0)
         {
-            //SceneManager.LoadScene(2);
-            //When utilized put the Game Over build scene number where the # is.
+            SceneManager.LoadScene(2);
         }
     }
 
+    /// <summary>
+    /// Section of the script that runs the collision.
+    /// </summary>
+    /// <param name="other"></param>
     private void OnTriggerEnter(Collider other)
     {
         //If we collide with a regular enemy, take regular damage.
@@ -156,6 +186,35 @@ public class PlayerController : MonoBehaviour
         if (other.gameObject.tag == "Portal")
         {
             transform.position = other.GetComponent<Portal>().spawnPoint.transform.position;
+        }
+        //If we collide with the heavy bullet pickup, set a bool to true.
+        if (other.gameObject.tag == "HeavyBulletPickUp")
+        {
+            HeavyBullet = true;
+            other.gameObject.SetActive(false);
+        }
+        //If we collide with the additional health pickup, increase Health Limit and heal to health Limit.
+        if (other.gameObject.tag == "MaxHealth")
+        {
+            other.gameObject.SetActive(false);
+            healthLimit += 100;
+            health = healthLimit;
+            if (health > healthLimit)
+            {
+                health = healthLimit;
+            }
+        }
+        //If we collide with the jump pack pick-up, increase jump force.
+        if (other.gameObject.tag == "JumpPack")
+        {
+            other.gameObject.SetActive(false);
+            jumpForce += 6f;
+        }
+        //If we collide with the Speed Boost pick-up, increase the speed of the player.
+        if (other.gameObject.tag == "SpeedBoost")
+        {
+            other.gameObject.SetActive(false);
+            speed += 5f;
         }
     }
 
