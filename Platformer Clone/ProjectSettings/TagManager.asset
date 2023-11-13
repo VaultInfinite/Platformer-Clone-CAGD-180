@@ -14,6 +14,7 @@ TagManager:
   - MaxHealth
   - SpeedBoost
   - JumpPack
+  - Environment
   layers:
   - Default
   - TransparentFX
