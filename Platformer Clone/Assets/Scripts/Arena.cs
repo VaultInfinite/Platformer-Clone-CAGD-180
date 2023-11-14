@@ -1,3 +1,8 @@
+/*
+ * Salmoria, Wyatt & Kalkat, Karen
+ * 11/13/23
+ * Creates an array to put enemies under, and when all enemies in array are defeated, ends the level and sends the player to the victory screen.
+ */
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
