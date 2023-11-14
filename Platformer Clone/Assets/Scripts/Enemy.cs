@@ -4,7 +4,7 @@ using UnityEngine;
 
 /*
  * Author: [Kalkat, Karen & Salmoria, Wyatt]
- * Last Updated: [10/31/2023]
+ * Last Updated: [11/13/2023]
  * [Contains the code for the Enemy]
  */
 
@@ -31,21 +31,22 @@ public class Enemy : MonoBehaviour
     void Update()
     {
         EnemyMovement();
-        GetHitByBullet();
     }
 
     /// <summary>
     /// allows the enemy to recieve damage from the bullet and take away its health
     /// </summary>
-    private void GetHitByBullet()
+    private void OnTriggerEnter(Collider other)
     {
-        RaycastHit hit;
-        if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.left), out hit, 1f))
+        if (other.gameObject.tag == "Bullet")
         {
-            if (hit.collider.gameObject.tag == "Bullet")
-            {
-                NoHealth();
-            }
+            other.gameObject.SetActive(false);
+            NoHealth();
+        }
+        if (other.gameObject.tag == "HeavyBullet")
+        {
+            other.gameObject.SetActive(false);
+            NoHealth();
         }
     }
 

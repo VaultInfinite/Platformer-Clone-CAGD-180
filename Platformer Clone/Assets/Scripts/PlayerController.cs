@@ -148,7 +148,7 @@ public class PlayerController : MonoBehaviour
     {
         StartCoroutine(InvulnTimer());
         StartCoroutine(Blink());
-        if (health == 0)
+        if (health <= 0)
         {
             SceneManager.LoadScene(2);
         }
