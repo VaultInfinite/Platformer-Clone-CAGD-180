@@ -1,6 +1,6 @@
 /*
  * Salmoria, Wyatt & Kalkat, Karen
- * 11/11/23
+ * 11/12/23
  * Handles the movement of Metroid Character (Probably Samus?) alongside other factors 
  * related to player control, such as lives and gun control.
  */
@@ -22,7 +22,7 @@ public class PlayerController : MonoBehaviour
     public GameObject Body;
 
     //Designation for Health Pack to allow for variable amounts of healing.
-    public HealthPackValue healthPack;
+    //public HealthPackValue healthPack;
 
     //location where the player respawns to
     private Vector3 startPos;
@@ -133,7 +133,7 @@ public class PlayerController : MonoBehaviour
 
             //if the raycast returns true then an object has been hit and the player is touching the floor
             //For Raycast(startPosition, RayDirection, output the object hit, maximumDistanceForTheRaycastToFire)
-            if (Physics.Raycast(transform.position, Vector3.down, out hit, 1.5f))
+            if (Physics.Raycast(transform.position, Vector3.down, out hit, 1f))
             {
                 Debug.Log("Touching the ground");
                 rigidbody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
@@ -175,7 +175,7 @@ public class PlayerController : MonoBehaviour
         //If we collide with a healing item, heal HP for designated amount.
         if (other.gameObject.tag == "Heal")
         {
-            health += healthPack.HPValue;
+            health += other.GetComponent<HealthPackValue>().HPValue;
             other.gameObject.SetActive(false);
             if (health > healthLimit)
             {

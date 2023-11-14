@@ -9,5 +9,5 @@ using UnityEngine;
 
 public class HealthPackValue : MonoBehaviour
 {
-    public int HPValue = 10;
+    public int HPValue;
 }

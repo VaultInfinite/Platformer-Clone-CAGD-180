@@ -12,16 +12,31 @@ public class HardEnemy : MonoBehaviour
     //Designation for the player
     public GameObject Player;
 
+    //Designation for the left point, limiting enemy movement in that direction.
+    public GameObject LeftEmpty;
+
+    //Designation for the right point, limiting enemy movement in that direction.
+    public GameObject RightEmpty;
+
     //Speed of the harder enemy
     public float speed;
-
-    //Checks to see if the enemy is colliding; if so, stop movement.
-    public bool collision = false;
 
     //Checks to see if facing right; needs to be designated when placed, should be permanently left to begin with.
     public bool goingLeft = false;
 
+    //The health of the hard enemy.
     public int health = 10;
+
+    //The left empty position.
+    private Vector3 leftPos;
+    //The Right empty position.
+    private Vector3 rightPos;
+
+    private void Start()
+    {
+        leftPos = LeftEmpty.transform.position;
+        rightPos = RightEmpty.transform.position;
+    }
 
     private void Update()
     {
@@ -31,18 +46,16 @@ public class HardEnemy : MonoBehaviour
             if (goingLeft == true)
             {
                 transform.Rotate(Vector3.up * 180);
-                collision = false;
             }
             goingLeft = false;
-            if (collision == false)
-            {
-                transform.position += Vector3.right * Time.deltaTime * speed;
-            }
-            else
+            if (transform.position.x >= rightPos.x)
             {
                 transform.position += Vector3.left * Time.deltaTime * speed;
             }
-            
+            else
+            {
+                transform.position += Vector3.right * Time.deltaTime * speed;
+            }
         }
         //If the player is to the left of the enemy, it will move to the left.
         else
@@ -50,18 +63,16 @@ public class HardEnemy : MonoBehaviour
             if (goingLeft == false)
             {
                 transform.Rotate(Vector3.up * 180);
-                collision = false;
             }
             goingLeft = true;
-            if (collision == false)
-            {
-                transform.position += Vector3.left * Time.deltaTime * speed;
-            }
-            else
+            if (transform.position.x <= leftPos.x)
             {
                 transform.position += Vector3.right * Time.deltaTime * speed;
             }
-            
+            else
+            {
+                transform.position += Vector3.left * Time.deltaTime * speed;
+            }
         }
     }
     /// <summary>
@@ -70,10 +81,6 @@ public class HardEnemy : MonoBehaviour
     /// <param name="other"></param>
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag == "Environment")
-        {
-            collision = true;
-        }
         if (other.gameObject.tag == "Bullet")
         {
             other.gameObject.SetActive(false);
