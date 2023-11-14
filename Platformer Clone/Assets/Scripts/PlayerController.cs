@@ -55,7 +55,7 @@ public class PlayerController : MonoBehaviour
     private bool shootLeft = false;
 
     //Bool to state whether the player has picked up the heavy bullet buff or not. If so, used to change bullet type.
-    private bool HeavyBullet = false;
+    public bool HeavyBullet = false;
 
     // Start is called before the first frame update
     void Start()

@@ -87,7 +87,7 @@ public class HardEnemy : MonoBehaviour
             health -= 1;
             if (health <= 0)
             {
-                Destroy(gameObject);
+                gameObject.SetActive(false);
             }
         }
         if (other.gameObject.tag == "HeavyBullet")
@@ -96,7 +96,7 @@ public class HardEnemy : MonoBehaviour
             health -= 3;
             if (health <= 0)
             {
-                Destroy(gameObject);
+                gameObject.SetActive(false);
             }
         }
     }
